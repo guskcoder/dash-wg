@@ -72,21 +72,24 @@ export default function Dashboard() {
   const calculateTotals = () => {
     if (!data || !data.length) return { transacoes: 0, valor: 0, lucro: 0 };
 
-    return data.reduce(
+    const totals = data.reduce(
       (acc, item) => {
+        // Parse dos valores removendo formatação
+        const transacoes = parseInt(item.total_transacoes.replace(/\./g, "")) || 0;
+        const valor = parseFloat(item.valor_total.replace(/\./g, "").replace(",", ".")) || 0;
+        const lucro = parseFloat(item.lucro_total.replace(/\./g, "").replace(",", ".")) || 0;
+
         return {
-          transacoes:
-            acc.transacoes + parseInt(item.total_transacoes.replace(/\./g, "")),
-          valor:
-            acc.valor +
-            parseFloat(item.valor_total.replace(/\./g, "").replace(",", ".")),
-          lucro:
-            acc.lucro +
-            parseFloat(item.lucro_total.replace(/\./g, "").replace(",", ".")),
+          transacoes: acc.transacoes + transacoes,
+          valor: acc.valor + valor,
+          lucro: acc.lucro + lucro,
         };
       },
       { transacoes: 0, valor: 0, lucro: 0 }
     );
+
+    console.log('Totais calculados:', totals);
+    return totals;
   };
 
   const totals = calculateTotals();
@@ -102,7 +105,13 @@ export default function Dashboard() {
 
   const getTotalBalance = () => {
     // Usa o lucro total calculado do histórico como saldo disponível, menos as deduções
-    return totals.lucro - deductions;
+    const balance = totals.lucro - deductions;
+    console.log('Cálculo do Saldo:', {
+      lucroTotal: totals.lucro,
+      deducoes: deductions,
+      saldoFinal: balance
+    });
+    return balance;
   };
 
   const formatCurrency = (value: number) => {
@@ -270,15 +279,10 @@ export default function Dashboard() {
           </div>
 
           <div className="bg-[#1D2A39] rounded-lg p-6 border border-[#354153]">
-            <p className="text-gray-400 text-sm mb-2">Saldo Disponível</p>
+            <p className="text-gray-400 text-sm mb-2">Valores Pagos</p>
             <p className="text-3xl font-bold text-green-400">
-              {formatCurrency(getTotalBalance())}
+              {formatCurrency(deductions)}
             </p>
-            {deductions > 0 && (
-              <p className="text-xs text-gray-500 mt-2">
-                Deduções aplicadas: {formatCurrency(deductions)}
-              </p>
-            )}
           </div>
         </div>
 

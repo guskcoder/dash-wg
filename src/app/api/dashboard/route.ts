@@ -6,7 +6,7 @@ export const revalidate = 0;
 export async function GET() {
   try {
     const response = await fetch(
-      "https://webhook.versell.tech/webhook/4701d4bc-a7f6-483d-b2a8-67caeab65a51",
+      "https://webhook.versell.tech/webhook/518c669d-4254-4121-b335-aff04543ca2d",
       {
         method: "GET",
         headers: {
@@ -42,8 +42,8 @@ export async function GET() {
         const transactionCount = item.count / 2;
         // Valor total dividido por 2
         const totalValue = item.amount / 2;
-        // Aplica a fórmula: (count / 2) * 0.65
-        const calculatedAmount = transactionCount * 0.65;
+        // Aplica a fórmula: (count / 2) * 0.37 / 2
+        const calculatedAmount = (transactionCount * 0.37) / 2;
 
         return {
           data_transacao: new Date(item.date).toLocaleDateString('pt-BR'),
