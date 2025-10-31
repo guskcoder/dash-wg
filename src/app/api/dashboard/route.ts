@@ -42,8 +42,8 @@ export async function GET() {
         const transactionCount = item.count / 2;
         // Valor total dividido por 2
         const totalValue = item.amount / 2;
-        // Aplica a fórmula: (count / 2) * 0.37 / 2
-        const calculatedAmount = (transactionCount * 0.37) / 2;
+        // Aplica a fórmula: (count / 2) * 0.37
+        const calculatedAmount = transactionCount * 0.37;
 
         return {
           data_transacao: new Date(item.date).toLocaleDateString('pt-BR'),
