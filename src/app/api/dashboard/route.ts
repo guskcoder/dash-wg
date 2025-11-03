@@ -26,16 +26,10 @@ export async function GET() {
     const rawData = await response.json();
     console.log("Data fetched successfully:", rawData);
 
-    // Pega a data de hoje
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    // Filtra apenas datas com dados válidos (count > 0) e a partir de hoje (inclusive datas futuras)
+    // Filtra apenas datas com dados válidos (count > 0)
     const filteredData = rawData
       .filter((item: { count: number; date: string }) => {
-        const itemDate = new Date(item.date);
-        itemDate.setHours(0, 0, 0, 0);
-        return item.count > 0 && itemDate <= today;
+        return item.count > 0;
       })
       .map((item: { date: string; count: number; amount: number }) => {
         // Count dividido por 2
