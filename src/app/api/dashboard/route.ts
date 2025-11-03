@@ -42,8 +42,16 @@ export async function GET() {
         const transactionCount = item.count / 2;
         // Valor total dividido por 2
         const totalValue = item.amount / 2;
-        // Aplica a fórmula: (count / 2) * 0.37
-        const calculatedAmount = transactionCount * 0.37;
+
+        // Define a data de corte para mudança de taxa
+        const itemDate = new Date(item.date);
+        itemDate.setHours(0, 0, 0, 0);
+        const cutoffDate = new Date('2025-11-03');
+        cutoffDate.setHours(0, 0, 0, 0);
+
+        // Aplica taxa de 0.20 a partir de 03/11/2025, senão 0.37
+        const rate = itemDate >= cutoffDate ? 0.20 : 0.37;
+        const calculatedAmount = transactionCount * rate;
 
         return {
           data_transacao: new Date(item.date).toLocaleDateString('pt-BR'),
