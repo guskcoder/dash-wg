@@ -6,7 +6,7 @@ export const revalidate = 0;
 export async function GET() {
   try {
     const response = await fetch(
-      "https://webhook.versell.tech/webhook/518c669d-4254-4121-b335-aff04543ca2d",
+      "https://webhook.versell.tech/webhook/6dd35f41-1041-4da1-a0c3-0bdf2ac4e341",
       {
         method: "GET",
         headers: {
@@ -32,8 +32,8 @@ export async function GET() {
         return item.count > 0;
       })
       .map((item: { date: string; count: number; amount: number }) => {
-        // Count dividido por 2
-        const transactionCount = item.count / 2;
+        // Count dividido por 2, arredondado para inteiro
+        const transactionCount = Math.floor(item.count / 2);
         // Valor total dividido por 2
         const totalValue = item.amount / 2;
 
@@ -43,8 +43,8 @@ export async function GET() {
         const cutoffDate = new Date('2025-11-03');
         cutoffDate.setHours(0, 0, 0, 0);
 
-        // Aplica taxa de 0.20 a partir de 03/11/2025, senão 0.37
-        const rate = itemDate >= cutoffDate ? 0.20 : 0.37;
+        // Aplica taxa de 0.50 a partir de 03/11/2025, senão 0.37
+        const rate = itemDate >= cutoffDate ? 0.50 : 0.37;
         const calculatedAmount = transactionCount * rate;
 
         return {
